@@ -11,7 +11,7 @@ class ProductController {
         this.createOrder = this.createOrder.bind(this);
         this.getOrderStatus = this.getOrderStatus.bind(this);
         this.ordersMap = new Map();
-        this.getProductById = this.getProductById.bind(this); // thêm vô 
+
 
     }
 
@@ -97,46 +97,20 @@ class ProductController {
     }
 
     async getProducts(req, res, next) {
-            try {
-                const token = req.headers.authorization;
-                if (!token) {
-                    return res.status(401).json({ message: "Unauthorized" });
-                }
-                const products = await Product.find({});
-
-                res.status(200).json(products);
-            } catch (error) {
-                console.error(error);
-                res.status(500).json({ message: "Server error" });
+        try {
+            const token = req.headers.authorization;
+            if (!token) {
+                return res.status(401).json({ message: "Unauthorized" });
             }
+            const products = await Product.find({});
+
+            res.status(200).json(products);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Server error" });
         }
-        // --- DÁN ĐOẠN CODE NÀY VÀO TRONG CLASS ---
-    async getProductById(req, res, next) {
-            try {
-                // Check token (thực ra middleware isAuthenticated đã làm, nhưng thêm cũng tốt)
-                const token = req.headers.authorization;
-                if (!token) {
-                    return res.status(401).json({ message: "Unauthorized" });
-                }
+    }
 
-                const productId = req.params.id; // Lấy ID từ URL
-                const Product = require("../models/product"); // Import model Product ở đây
-                const product = await Product.findById(productId); // Tìm sản phẩm
-
-                if (!product) {
-                    return res.status(404).json({ message: "Product not found" });
-                }
-
-                res.status(200).json(product); // Trả về sản phẩm
-            } catch (error) {
-                console.error(error);
-                if (error.kind === 'ObjectId') { // Xử lý lỗi nếu ID không đúng định dạng
-                    return res.status(400).json({ message: "Invalid Product ID format" });
-                }
-                res.status(500).json({ message: "Server error" });
-            }
-        }
-        // ------------------------------------
 }
 
 module.exports = ProductController;

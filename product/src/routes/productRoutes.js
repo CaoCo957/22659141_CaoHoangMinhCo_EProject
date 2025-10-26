@@ -8,7 +8,6 @@ const productController = new ProductController();
 // KHÔNG CÓ /products ở đây
 router.post("/", isAuthenticated, productController.createProduct);
 router.get("/", isAuthenticated, productController.getProducts);
-router.get("/:id", isAuthenticated, productController.getProductById); // Chỉ có /:id
 router.post("/buy", isAuthenticated, productController.createOrder);
 
 module.exports = router;
